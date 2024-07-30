@@ -38,9 +38,16 @@ class Board:
         self.board[r][c] = new_piece
 
     # takes a piece as a parameter and moves it to the specified position
-    def move_piece(self, piece: Piece, position: list[int]):
+    def move_piece(self, piece: Piece, position: list[int], enemy_pieces: list):
         # remove the piece at the current location on the board
         self.board[piece.position[0]][piece.position[1]] = None
+        # get the target position
+        # if none, no attack was made
+        # if the target has a piece, an attack was made
+        # remove the attacked piece
+        target = self.board[position[0]][position[1]]
+        if target != None and target in enemy_pieces:
+            enemy_pieces.pop(enemy_pieces.index(target))
         self.board[position[0]][position[1]] = piece
         piece.position = position
 

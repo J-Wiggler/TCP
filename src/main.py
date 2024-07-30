@@ -107,15 +107,25 @@ def initialize_board(red: list, blue: list, board: Board):
     # draw the board
     #board.draw_board()
 
-def process_move(move: str, board, turn, team_pieces):
+def process_move(move: str, board, turn, team_pieces, enemy_pieces):
     # process the move and convert it to array coordinates
     # assuming correct input, positions[0] contains initial row and col
     # positions[1] contains final row and col
     try:
         # ensure there are no exceptions in parsing the string
         positions = move.split("->")
+        # input validation
+        if len(positions) != 2:
+            print("BAD INPUT")
+            return False
         positions[0] = positions[0].split(",")
+        if len(positions[0]) != 2:
+            print("BAD INPUT")
+            return False
         positions[1] = positions[1].split(",")
+        if len(positions[1]) != 2:
+            print("BAD INPUT")
+            return False
     except:
         # return false if the input cannot be processed
         print("BAD INPUT")
@@ -139,7 +149,7 @@ def process_move(move: str, board, turn, team_pieces):
     valid = piece.compute_move(positions, board=board)
 
     if valid:
-        board.move_piece(piece, pos1)
+        board.move_piece(piece, pos1, enemy_pieces=enemy_pieces)
         return True
     else:
         print("INVALID MOVE")
@@ -158,7 +168,7 @@ def main():
     m_board = Board()
 
     # game start, menu of sorts
-    print("WELCOME TO CHESST")
+    print("WELCOME TO TCP")
 
     while True:
         cmd = input("START(s) | QUIT(q) >> ")
@@ -201,10 +211,18 @@ def main():
                     valid_move = False
                     if turn % 2 == 0:
                         move = input(Fore.RED + "\nENTER A MOVE (r0,c0->r1,c1) >> ")
-                        valid_move = process_move(move=move, board=m_board, turn=turn, team_pieces=red)
+                        valid_move = process_move(move=move, 
+                                                  board=m_board, 
+                                                  turn=turn, 
+                                                  team_pieces=red,
+                                                  enemy_pieces=blue)
                     else:
                         move = input(Fore.BLUE + "\nENTER A MOVE (r0,c0->r1,c1) >> ")
-                        valid_move = process_move(move=move, board=m_board, turn=turn, team_pieces=blue)
+                        valid_move = process_move(move=move, 
+                                                  board=m_board, 
+                                                  turn=turn, 
+                                                  team_pieces=blue,
+                                                  enemy_pieces=red)
                     if valid_move:
                         break
                 turn += 1
