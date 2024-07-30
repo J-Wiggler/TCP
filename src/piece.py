@@ -3,10 +3,13 @@ class Piece:
     id: str
     icon: str
     position: list
-    team: int
+    team: int = 0
+    pos_moves= []
     def __init__(self, name, id, icon, position, team):
         self.name = name
         self.id = id
         self.icon = icon
         self.position = position
-        team = team
+        self.team = team
+    
+    
