@@ -208,16 +208,26 @@ def main():
             if choice.upper() == "MOVE":
                 # movement loop, keep reading until a valid move is made
                 while True:
+                    # if a move is valid, progress to the next turn
+                    # by breaking to the outermost loop
                     valid_move = False
+                    # determines if the user chose to go back to the choic menus
+                    back = False
                     if turn % 2 == 0:
-                        move = input(Fore.RED + "\nENTER A MOVE (r0,c0->r1,c1) >> ")
+                        move = input(Fore.RED + "\nENTER A MOVE [r0,c0->r1,c1, BACK] >> ")
+                        if move.upper() == "BACK":
+                            back = True
+                            break
                         valid_move = process_move(move=move, 
                                                   board=m_board, 
                                                   turn=turn, 
                                                   team_pieces=red,
                                                   enemy_pieces=blue)
                     else:
-                        move = input(Fore.BLUE + "\nENTER A MOVE (r0,c0->r1,c1) >> ")
+                        move = input(Fore.BLUE + "\nENTER A MOVE [r0,c0->r1,c1, BACK] >> ")
+                        if move.upper() == "BACK":
+                            back = True
+                            break
                         valid_move = process_move(move=move, 
                                                   board=m_board, 
                                                   turn=turn, 
@@ -225,8 +235,9 @@ def main():
                                                   enemy_pieces=red)
                     if valid_move:
                         break
-                turn += 1
-                break
+                if not back:
+                    turn += 1
+                    break
             
             elif choice.upper() == "DRAW":
                 pass

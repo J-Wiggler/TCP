@@ -50,6 +50,8 @@ class Board:
             enemy_pieces.pop(enemy_pieces.index(target))
         self.board[position[0]][position[1]] = piece
         piece.position = position
+    
+    # functions to determine if in check/checkmate
 
     def print_array(self):
         print(self.board)
