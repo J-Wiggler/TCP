@@ -14,18 +14,21 @@ This will be updated when a binary is created.
 ## Questions
 You can contact me at andy1233567890@gmail.com
 
-## Issues
-- Queen still requires implementation for movement
+## Issues by priority (tentative)
+- account for special moves
+    - castle
+    - pawn promotion
+    - en passant
 - must devise way to look for check states before allowing a move to be made
     - putting a player into check
     - must not be able to put self into check, make these moves invalid
 - check for checkmate
     - analyze all possible moves
     - if no move is possible (to exit check), player is checkmated
-- account for special moves
-    - castle
-    - pawn promotion
-    - en passant
+- display for scores and captured pieces
+
+
+
 
 ## Dependencies
 - colorama, for printing colored output
