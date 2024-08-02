@@ -2,6 +2,10 @@ from piece import Piece
 from colorama import Fore
 from board import Board
 class King(Piece):
+    # used for castle validity
+    moved = False
+    # determine if king is in check
+    check = False
     def __init__(self, position, team):
         if team == 0:
             super().__init__("king", "k", Fore.RED + "\u265A", position, team)
@@ -26,5 +30,49 @@ class King(Piece):
         
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
+                moved = True
                 return True, move[2]
         return False, None
+    
+    # called when castle command is inputted
+    def castle(self, dir: str, board: Board):
+        if not self.check and not self.moved:
+            if dir == "k":
+                # see if no bishop or knight
+                for i in range(5, 7):
+                    if board.board[self.position[0]][i] != None:
+                        return False
+                # check the kingside rook position
+                rook = board.board[self.position[0]][7]
+                if rook == None or rook.id != "r":
+                    return False
+                if rook.moved:
+                    return False
+                # perform the castle
+                board.board[self.position[0]][self.position[1] + 1] = rook
+                board.board[rook.position[0]][rook.position[1]] = None
+                rook.position = [self.position[0], self.position[1] + 1]
+                board.board[rook.position[0]][rook.position[1] + 1] = self
+                board.board[self.position[0]][self.position[1]] = None
+                self.position = [rook.position[0], rook.position[1] + 1]
+                return True
+            elif dir == "q":
+                # check empty spaces
+                for i in range(1, 4):
+                    if board.board[self.position[0]][i] != None:
+                        return False
+                # check the queenside rook position
+                rook = board.board[self.position[0]][0]
+                if rook == None or rook.id != "r":
+                    return False
+                if rook.moved:
+                    return False
+                board.board[self.position[0]][self.position[1] - 1] = rook
+                board.board[rook.position[0]][rook.position[1]] = None
+                rook.position = [self.position[0], self.position[1] - 1]
+                board.board[rook.position[0]][rook.position[1] - 1] = self
+                board.board[self.position[0]][self.position[1]] = None
+                self.position = [rook.position[0], rook.position[1] - 1]
+                return True
+        # error
+        return False

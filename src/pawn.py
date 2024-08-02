@@ -1,6 +1,7 @@
 from piece import Piece
 from colorama import Fore
 from board import Board
+from queen import Queen
 class Pawn(Piece):
     # used for the first move allowing 2 tiles
     moved: bool = False
@@ -98,11 +99,31 @@ class Pawn(Piece):
                 return True, move[2]
         # the requested position is not valid
         return False, None
+
+    def promote(self, board: Board):
+        new_piece = Queen(position=self.position, team=self.team)
+        if self.team == 0:
+            board.red.pop(board.red.index(self))
+            board.red.append(new_piece)
+        elif self.team == 1:
+            board.blue.pop(board.blue.index(self))
+            board.blue.append(new_piece)
+        board.board[new_piece.position[0]][new_piece.position[1]] = new_piece
     
-    def update_state(self, turn: int):
+    def update_state(self, turn: int, board: Board):
         # reset the enpassant
         if self.enp:
             if turn % 2 == 0 and self.team == 0:
                 self.enp = False
             if turn % 2 == 1 and self.team == 1:
                 self.enp = False
+    
+        # check promotion
+        if self.team == 0 and self.position[0] == 0:
+            self.promote(board)
+        elif self.team == 1 and self.position[0] == 7:
+            self.promote(board)
+        
+
+   
+

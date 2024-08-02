@@ -1,5 +1,5 @@
 # class to define a board object
-from piece import Piece
+#from piece import Piece
 from colorama import Fore
 
 class Board:
@@ -9,6 +9,10 @@ class Board:
     board: list[list[None]]
     # list containing the two tile colors
     tiles = ["\u25A6", "\u25A1"]
+    # red team
+    red = []
+    # blue team
+    blue = []
 
     # ensure all positions on the board are unique locations in memory
     def __init__(self) -> None:
@@ -21,6 +25,11 @@ class Board:
 
     # prints the board to stdout
     def draw_board(self, turn: int):
+        # update all piece states
+        for piece in self.red:
+            piece.update_state(turn, self)
+        for piece in self.blue:
+            piece.update_state(turn, self)
         print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
         # iterate over all rows
         for row in range(8):
@@ -28,19 +37,18 @@ class Board:
             for col in range(8):
                 if self.board[row][col] != None:
                     piece = self.board[row][col]
-                    piece.update_state(turn)
                     print(piece.icon + " ", end="")
                 else:
                     print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
             print()
 
-    def add_piece(self, new_piece: Piece):
+    def add_piece(self, new_piece):
         r = new_piece.position[0]
         c = new_piece.position[1]
         self.board[r][c] = new_piece
 
     # takes a piece as a parameter and moves it to the specified position
-    def move_piece(self, piece: Piece, target: Piece, position: list[int], enemy_pieces: list):
+    def move_piece(self, piece, target, position: list[int], enemy_pieces: list):
         # remove the piece at the current location on the board
         self.board[piece.position[0]][piece.position[1]] = None
         # get the target position

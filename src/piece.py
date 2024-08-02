@@ -1,3 +1,4 @@
+from board import Board
 class Piece:
     name: str
     id: str
@@ -12,5 +13,5 @@ class Piece:
         self.position = position
         self.team = team
     
-    def update_state(self, turn: int):
+    def update_state(self, turn: int, board: Board):
         pass

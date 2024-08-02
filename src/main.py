@@ -11,7 +11,7 @@ from king import King
 # setup the initial pieces and draw the board
 # does not print turn nor draw the board
 # these steps are done in the main loop
-def initialize_board(red: list, blue: list, board: Board):
+def initialize_board(board: Board):
     # print initialization message and turn
     #print("\nBEGIN")
     #print("<<TURN 0::RED TO MOVE>>\n")
@@ -20,8 +20,8 @@ def initialize_board(red: list, blue: list, board: Board):
     for i in range(8):
         p0 = Pawn([6, i], 0)
         p1 = Pawn([1, i], 1)
-        red.append(p0)
-        blue.append(p1)
+        board.red.append(p0)
+        board.blue.append(p1)
         board.add_piece(p0)
         board.add_piece(p1)
     # initialize the rest of the pieces
@@ -29,79 +29,79 @@ def initialize_board(red: list, blue: list, board: Board):
     # ROOKS
     #########
     p = Rook(position=[7, 0], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Rook(position=[7, 7], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Rook(position=[0, 0], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     p = Rook(position=[0, 7], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     ##########
     # KNIGHTS
     ##########
     p = Knight(position=[7, 1], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Knight(position=[7, 6], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Knight(position=[0, 1], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     p = Knight(position=[0, 6], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     ##########
     # BISHOPS
     ##########
     p = Bishop(position=[7, 2], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Bishop(position=[7, 5], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Bishop(position=[0, 2], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     p = Bishop(position=[0, 5], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     #########
     # QUEENS
     #########
     p = Queen(position=[7, 3], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = Queen(position=[0, 3], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     #########
     # KINGS
     #########
     p = King(position=[7, 4], team=0)
-    red.append(p)
+    board.red.append(p)
     board.add_piece(p)
 
     p = King(position=[0, 4], team=1)
-    blue.append(p)
+    board.blue.append(p)
     board.add_piece(p)
 
     # draw the board
@@ -111,6 +111,30 @@ def process_move(move: str, board, turn, team_pieces, enemy_pieces):
     # process the move and convert it to array coordinates
     # assuming correct input, positions[0] contains initial row and col
     # positions[1] contains final row and col
+
+    # check for castle
+    if move.find("castle") != -1:
+        try:
+            dir = move.split(" ")[1]
+            # get the moving team
+            team = team_pieces[0].team
+            # find the position of the king
+            king_piece = None
+            if team == 0:
+                king_piece = board.board[7][4]
+            else:
+                king_piece = board.board[0][4]
+            # check if the position contains the king
+            valid = False
+            if king_piece != None and king_piece.id == "k":
+                valid = king_piece.castle(dir, board)
+            if not valid:
+                print("INVALID MOVE")
+                return False
+            return True
+        except:
+            print("BAD INPUT")
+            return False
     try:
         # ensure there are no exceptions in parsing the string
         positions = move.split("->")
@@ -159,13 +183,14 @@ def main():
     # turn counter
     turn = 0
     # lists to contain each player's pieces
-    red = []
-    blue = []
+    # red = []
+    # blue = []
 
-    players = [(red, Fore.RED), (blue, Fore.BLUE)]
 
     # initialize the main board
     m_board = Board()
+    players = [(m_board.red, Fore.RED), (m_board.blue, Fore.BLUE)]
+
 
     # game start, menu of sorts
     print("WELCOME TO TCP")
@@ -173,7 +198,7 @@ def main():
     while True:
         cmd = input("START(s) | QUIT(q) >> ")
         if cmd.upper() == "S":
-            initialize_board(red=red, blue=blue, board=m_board)
+            initialize_board(board=m_board)
             break
         elif cmd.upper() == "Q":
             print("Farewell")
@@ -221,8 +246,8 @@ def main():
                         valid_move = process_move(move=move, 
                                                   board=m_board, 
                                                   turn=turn, 
-                                                  team_pieces=red,
-                                                  enemy_pieces=blue)
+                                                  team_pieces=m_board.red,
+                                                  enemy_pieces=m_board.blue)
                     else:
                         move = input(Fore.BLUE + "\nENTER A MOVE [r0,c0->r1,c1, BACK] >> ")
                         if move.upper() == "BACK":
@@ -231,8 +256,8 @@ def main():
                         valid_move = process_move(move=move, 
                                                   board=m_board, 
                                                   turn=turn, 
-                                                  team_pieces=blue,
-                                                  enemy_pieces=red)
+                                                  team_pieces=m_board.blue,
+                                                  enemy_pieces=m_board.red)
                     if valid_move:
                         break
                 if not back:

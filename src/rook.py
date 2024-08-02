@@ -2,6 +2,8 @@ from piece import Piece
 from colorama import Fore
 from board import Board
 class Rook(Piece):
+    # used for castle validity
+    moved = False
     def __init__(self, position, team):
         if team == 0:
             super().__init__("rook", "r", Fore.RED + "\u265C", position, team)
@@ -76,5 +78,6 @@ class Rook(Piece):
         # check validity of requested position
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
+                moved = True
                 return True, move[2]
         return False, None
