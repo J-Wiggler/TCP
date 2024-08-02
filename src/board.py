@@ -1,6 +1,7 @@
 # class to define a board object
 from piece import Piece
 from colorama import Fore
+
 class Board:
     # standard dimensions of a chessboard
     dim = (8, 8)
@@ -19,7 +20,7 @@ class Board:
         pass
 
     # prints the board to stdout
-    def draw_board(self):
+    def draw_board(self, turn: int):
         print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
         # iterate over all rows
         for row in range(8):
@@ -27,6 +28,7 @@ class Board:
             for col in range(8):
                 if self.board[row][col] != None:
                     piece = self.board[row][col]
+                    piece.update_state(turn)
                     print(piece.icon + " ", end="")
                 else:
                     print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
@@ -38,15 +40,15 @@ class Board:
         self.board[r][c] = new_piece
 
     # takes a piece as a parameter and moves it to the specified position
-    def move_piece(self, piece: Piece, position: list[int], enemy_pieces: list):
+    def move_piece(self, piece: Piece, target: Piece, position: list[int], enemy_pieces: list):
         # remove the piece at the current location on the board
         self.board[piece.position[0]][piece.position[1]] = None
         # get the target position
         # if none, no attack was made
         # if the target has a piece, an attack was made
         # remove the attacked piece
-        target = self.board[position[0]][position[1]]
-        if target != None and target in enemy_pieces:
+        if target != None:
+            self.board[target.position[0]][target.position[1]] = None
             enemy_pieces.pop(enemy_pieces.index(target))
         self.board[position[0]][position[1]] = piece
         piece.position = position

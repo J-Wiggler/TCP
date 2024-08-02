@@ -12,4 +12,5 @@ class Piece:
         self.position = position
         self.team = team
     
-    
+    def update_state(self, turn: int):
+        pass

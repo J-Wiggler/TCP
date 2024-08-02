@@ -32,11 +32,11 @@ class Bishop(Piece):
             piece = board.board[pos0[0] + offset][pos0[1] + offset]
             if piece == None:
                 # add the empty space to valid list
-                self.pos_moves.append([pos0[0] + offset, pos0[1] + offset])
+                self.pos_moves.append([pos0[0] + offset, pos0[1] + offset, None])
             elif piece.team != self.team:
                 # if enemy piece is found, add to valid list
                 # but break
-                self.pos_moves.append(piece.position)
+                self.pos_moves.append([pos0[0] + offset, pos0[1] + offset, piece])
                 break
             else:
                 # break if own piece is blocking a path
@@ -47,11 +47,11 @@ class Bishop(Piece):
             piece = board.board[pos0[0] - offset][pos0[1] - offset]
             if piece == None:
                 # add empty space to valid list
-                self.pos_moves.append([pos0[0] - offset, pos0[1] - offset])
+                self.pos_moves.append([pos0[0] - offset, pos0[1] - offset, None])
             elif piece.team != self.team:
                 # if enemy piece is found, add to valid list
                 # but break
-                self.pos_moves.append(piece.position)
+                self.pos_moves.append([pos0[0] - offset, pos0[1] - offset, piece])
                 break
             else:
                 # break if own piece is blocking a path
@@ -64,11 +64,11 @@ class Bishop(Piece):
             piece = board.board[pos0[0] - offset][pos0[1] + offset]
             if piece == None:
                 # add empty space to valid list
-                self.pos_moves.append([pos0[0] - offset, pos0[1] + offset])
+                self.pos_moves.append([pos0[0] - offset, pos0[1] + offset, None])
             elif piece.team != self.team:
                 # if enemy piece is found, add to valid list
                 # but break
-                self.pos_moves.append(piece.position)
+                self.pos_moves.append([pos0[0] - offset, pos0[1] + offset, piece])
                 break
             else:
                 # break if own piece is blocking a path
@@ -79,11 +79,11 @@ class Bishop(Piece):
             piece = board.board[pos0[0] + offset][pos0[1] - offset]
             if piece == None:
                 # add empty space to valid list
-                self.pos_moves.append([pos0[0] + offset, pos0[1] - offset])
+                self.pos_moves.append([pos0[0] + offset, pos0[1] - offset, None])
             elif piece.team != self.team:
                 # if enemy piece is found, add to valid list
                 # but break
-                self.pos_moves.append(piece.position)
+                self.pos_moves.append([pos0[0] + offset, pos0[1] - offset, piece])
                 break
             else:
                 # break if own piece is blocking a path
@@ -95,6 +95,6 @@ class Bishop(Piece):
         for move in self.pos_moves:
             # move is valid
             if move[0] == pos1[0] and move[1] == pos1[1]:
-                return True
+                return True, move[2]
         # move is invalid
-        return False
+        return False, None

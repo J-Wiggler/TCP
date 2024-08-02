@@ -22,9 +22,9 @@ class Knight(Piece):
             if (pos0[0] + move[0]) in range(0, 8) and (pos0[1] + move[1]) in range(0, 8):
                 piece = board.board[pos0[0] + move[0]][pos0[1] + move[1]]
                 if piece == None or piece.team != self.team:
-                    self.pos_moves.append([pos0[0] + move[0], pos0[1] + move[1]])
+                    self.pos_moves.append([pos0[0] + move[0], pos0[1] + move[1], piece])
         
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
-                return True
-        return False
+                return True, move[2]
+        return False, None

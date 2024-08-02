@@ -30,9 +30,9 @@ class Rook(Piece):
         while (pos0[0] - offset) in range(0, 8):
             piece = board.board[pos0[0] - offset][pos0[1]]
             if piece == None:
-                self.pos_moves.append([pos0[0] - offset, pos0[1]])
+                self.pos_moves.append([pos0[0] - offset, pos0[1], None])
             elif piece.team != self.team:
-                self.pos_moves.append([pos0[0] - offset, pos0[1]])
+                self.pos_moves.append([pos0[0] - offset, pos0[1], piece])
                 break
             else:
                 break
@@ -41,9 +41,9 @@ class Rook(Piece):
         while (pos0[0] + offset) in range(0, 8):
             piece = board.board[pos0[0] + offset][pos0[1]]
             if piece == None:
-                self.pos_moves.append([pos0[0] + offset, pos0[1]])
+                self.pos_moves.append([pos0[0] + offset, pos0[1], None])
             elif piece.team != self.team:
-                self.pos_moves.append([pos0[0] + offset, pos0[1]])
+                self.pos_moves.append([pos0[0] + offset, pos0[1], piece])
                 break
             else:
                 break
@@ -54,9 +54,9 @@ class Rook(Piece):
         while (pos0[1] - offset) in range(0, 8):
             piece = board.board[pos0[0]][pos0[1] - offset]
             if piece == None:
-                self.pos_moves.append([pos0[0], pos0[1] - offset])
+                self.pos_moves.append([pos0[0], pos0[1] - offset, None])
             elif piece.team != self.team:
-                self.pos_moves.append([pos0[0], pos0[1] - offset])
+                self.pos_moves.append([pos0[0], pos0[1] - offset, piece])
                 break
             else:
                 break
@@ -65,9 +65,9 @@ class Rook(Piece):
         while (pos0[1] + offset) in range(0, 8):
             piece = board.board[pos0[0]][pos0[1] + offset]
             if piece == None:
-                self.pos_moves.append([pos0[0], pos0[1] + offset])
+                self.pos_moves.append([pos0[0], pos0[1] + offset, None])
             elif piece.team != self.team:
-                self.pos_moves.append([pos0[0], pos0[1] + offset])
+                self.pos_moves.append([pos0[0], pos0[1] + offset, piece])
                 break
             else:
                 break
@@ -76,5 +76,5 @@ class Rook(Piece):
         # check validity of requested position
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
-                return True
-        return False
+                return True, move[2]
+        return False, None

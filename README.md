@@ -25,6 +25,10 @@ You can contact me at andy1233567890@gmail.com
 - check for checkmate
     - analyze all possible moves
     - if no move is possible (to exit check), player is checkmated
+- power system
+    - on random turns, pick a random empty tile to spawn a power
+    - moving to that tile will give the piece the power
+    - if player chooses to use a power, forfeit the move
 - display for scores and captured pieces
 
 

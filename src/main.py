@@ -146,10 +146,10 @@ def process_move(move: str, board, turn, team_pieces, enemy_pieces):
         print("INVALID MOVE")
         return False
     
-    valid = piece.compute_move(positions, board=board)
+    valid, target = piece.compute_move(positions, board=board)
 
     if valid:
-        board.move_piece(piece, pos1, enemy_pieces=enemy_pieces)
+        board.move_piece(piece, target, pos1, enemy_pieces=enemy_pieces)
         return True
     else:
         print("INVALID MOVE")
@@ -195,7 +195,7 @@ def main():
             print(Fore.WHITE + "\n<<TURN " + str(turn) + "::RED TO MOVE>>\n")
         else:
             print(Fore.WHITE + "\n<<TURN " + str(turn) + "::BLUE TO MOVE>>\n")
-        m_board.draw_board()
+        m_board.draw_board(turn)
 
         ## player choice loop
         # player can choose to move, offer draw, or resign
