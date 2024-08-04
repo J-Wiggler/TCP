@@ -12,7 +12,7 @@ class King(Piece):
         else:
             super().__init__("king", "k", Fore.BLUE + "\u265A", position, team)
 
-    def compute_move(self, positions: list[list[int]], board: Board):
+    def compute_move(self, positions: list[list[int]], board: Board, checking: bool):
         # the initial position
         pos0 = positions[0]
         # the requested position to move
@@ -30,9 +30,15 @@ class King(Piece):
         
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
-                moved = True
-                return True, move[2]
-        return False, None
+                # determine if the move is valid by check (ie you do not put yourself in check)
+                check_valid = False
+                if checking:
+                    check_valid = self.check_new_board_state(board, move)
+                if check_valid:
+                    return False, None, self.pos_moves
+                self.moved = True
+                return True, move[2], self.pos_moves
+        return False, None, self.pos_moves
     
     # called when castle command is inputted
     def castle(self, dir: str, board: Board):

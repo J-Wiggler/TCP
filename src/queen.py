@@ -8,7 +8,7 @@ class Queen(Piece):
         else:
             super().__init__("queen", "q", Fore.BLUE + "\u265B", position, team)
 
-    def compute_move(self, positions: list[list[int]], board: Board):
+    def compute_move(self, positions: list[list[int]], board: Board, checking: bool):
         # first check possible moves
         # the team alignment is checked in the calling function
 
@@ -132,5 +132,11 @@ class Queen(Piece):
 
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
-                return True, move[2]
-        return False, None
+                # determine if the move is valid by check (ie you do not put yourself in check)
+                check_valid = False
+                if checking:
+                    check_valid = self.check_new_board_state(board, move)
+                if check_valid:
+                    return False, None, self.pos_moves
+                return True, move[2], self.pos_moves
+        return False, None, self.pos_moves

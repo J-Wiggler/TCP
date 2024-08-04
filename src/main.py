@@ -107,7 +107,7 @@ def initialize_board(board: Board):
     # draw the board
     #board.draw_board()
 
-def process_move(move: str, board, turn, team_pieces, enemy_pieces):
+def process_move(move: str, board, turn, team_pieces):
     # process the move and convert it to array coordinates
     # assuming correct input, positions[0] contains initial row and col
     # positions[1] contains final row and col
@@ -170,10 +170,11 @@ def process_move(move: str, board, turn, team_pieces, enemy_pieces):
         print("INVALID MOVE")
         return False
     
-    valid, target = piece.compute_move(positions, board=board)
+    valid, target, pos_moves = piece.compute_move(positions, board=board, checking=True)
 
     if valid:
-        board.move_piece(piece, target, pos1, enemy_pieces=enemy_pieces)
+        board.move_piece(piece, target, pos1, (turn + 1) % 2)
+        board.check(turn % 2)
         return True
     else:
         print("INVALID MOVE")
@@ -193,10 +194,13 @@ def main():
 
 
     # game start, menu of sorts
-    print("WELCOME TO TCP")
+    welcome_msg = "###########################\n" +\
+                  "###### WELCOME TO TCP #####\n" +\
+                  "###########################\n"
+    print(welcome_msg)
 
     while True:
-        cmd = input("START(s) | QUIT(q) >> ")
+        cmd = input("START -> `s`\nQUIT -> `q`\n>> ")
         if cmd.upper() == "S":
             initialize_board(board=m_board)
             break
@@ -221,7 +225,6 @@ def main():
         else:
             print(Fore.WHITE + "\n<<TURN " + str(turn) + "::BLUE TO MOVE>>\n")
         m_board.draw_board(turn)
-
         ## player choice loop
         # player can choose to move, offer draw, or resign
         while True:
@@ -246,8 +249,7 @@ def main():
                         valid_move = process_move(move=move, 
                                                   board=m_board, 
                                                   turn=turn, 
-                                                  team_pieces=m_board.red,
-                                                  enemy_pieces=m_board.blue)
+                                                  team_pieces=m_board.red) 
                     else:
                         move = input(Fore.BLUE + "\nENTER A MOVE [r0,c0->r1,c1, BACK] >> ")
                         if move.upper() == "BACK":
@@ -256,8 +258,7 @@ def main():
                         valid_move = process_move(move=move, 
                                                   board=m_board, 
                                                   turn=turn, 
-                                                  team_pieces=m_board.blue,
-                                                  enemy_pieces=m_board.red)
+                                                  team_pieces=m_board.blue)
                     if valid_move:
                         break
                 if not back:

@@ -10,7 +10,7 @@ class Rook(Piece):
         else:
             super().__init__("rook", "r", Fore.BLUE + "\u265C", position, team)
     
-    def compute_move(self, positions: list[list[int]], board: Board):
+    def compute_move(self, positions: list[list[int]], board: Board, checking: bool):
         # first check possible moves
         # the team alignment is checked in the calling function
 
@@ -78,6 +78,12 @@ class Rook(Piece):
         # check validity of requested position
         for move in self.pos_moves:
             if move[0] == pos1[0] and move[1] == pos1[1]:
-                moved = True
-                return True, move[2]
-        return False, None
+                # determine if the move is valid by check (ie you do not put yourself in check)
+                check_valid = False
+                if checking:
+                    check_valid = self.check_new_board_state(board, move)
+                if check_valid:
+                    return False, None, self.pos_moves
+                self.moved = True
+                return True, move[2], self.pos_moves
+        return False, None, self.pos_moves

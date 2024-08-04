@@ -19,7 +19,7 @@ class Pawn(Piece):
         else:
             super().__init__("pawn", "p", Fore.BLUE + "\u265F", position, team)
 
-    def compute_move(self, positions: list[list[int]], board: Board):
+    def compute_move(self, positions: list[list[int]], board: Board, checking: bool):
         # first check possible moves
         # the team alignment is checked in the calling function
 
@@ -87,7 +87,15 @@ class Pawn(Piece):
 
         # determine if the requested position is valid
         for move in self.pos_moves:
+            # valid move by position
             if move[0] == pos1[0] and move[1] == pos1[1]:
+                # determine if the move is valid by check (ie you do not put yourself in check)
+                check_valid = False
+                if checking:
+                    check_valid = self.check_new_board_state(board, move)
+                if check_valid:
+                    return False, None, self.pos_moves
+
                 if move[2] != None:
                     self.cap = True
                 # determine if en passant is allowed
@@ -96,9 +104,9 @@ class Pawn(Piece):
                     self.enp = True
                 self.moved = True
 
-                return True, move[2]
+                return True, move[2], self.pos_moves
         # the requested position is not valid
-        return False, None
+        return False, None, self.pos_moves
 
     def promote(self, board: Board):
         new_piece = Queen(position=self.position, team=self.team)
