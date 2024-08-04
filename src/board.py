@@ -33,6 +33,10 @@ class Board:
         for piece in self.blue:
             piece.update_state(turn, self)
 
+        self.checkmate(0)
+        self.checkmate(1)
+        self.stalemate(0)
+        self.stalemate(1)
         self.check(0)
         self.check(1)
         print(len(self.red))
@@ -113,11 +117,60 @@ class Board:
         king.check = False
         #print("not check")
         return False
-        
-    def checkmate(self, team: int):
-        
-        pass
+    
 
+    # call every time the board is drawn or turn starts
+    # a player is checkmated when they are in check and if they have no available moves
+    # if a player is checkmated, end the game
+    def checkmate(self, team: int):
+        if not self.check(team):
+            print("NO CHECKMATE")
+            return False
+        # player is checked, look for possible moves
+        all_moves = []
+        if team == 0:
+            for piece in self.red:
+                # calculate possible moves accounting for the check
+                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                pos_moves = temp[2]
+                all_moves.extend(pos_moves)
+        else:
+            for piece in self.blue:
+                # calculate possible moves accounting for the check
+                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                pos_moves = temp[2]
+                all_moves.extend(pos_moves)
+        if len(all_moves) == 0:
+            print("CHECKMATE")
+            return True
+        print("NO CHECKMATE")
+        return False
+    
+    # if no player is in check and no more moves are possible
+    # call at the start of each player's turn
+    def stalemate(self, team):
+        if self.check(team):
+            print("NOT STALEMATE")
+            return False
+            # check red moves
+        all_moves = []
+        if team == 0:
+            for piece in self.red:
+                # calculate possible moves accounting for the check
+                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                pos_moves = temp[2]
+                all_moves.extend(pos_moves)
+        else:
+            for piece in self.blue:
+                # calculate possible moves accounting for the check
+                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                pos_moves = temp[2]
+                all_moves.extend(pos_moves)
+        if len(all_moves) == 0:
+            print("STALEMATE")
+            return True
+        print("NOT STALEMATE")
+        return False
 
     def print_array(self):
         print(self.board)

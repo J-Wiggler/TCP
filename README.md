@@ -15,21 +15,21 @@ This will be updated when a binary is created.
 You can contact me at andy1233567890@gmail.com
 
 ## Issues by priority (tentative)
-- account for special moves
+- account for special moves (mostly done, testing)
     - castle (done, testing)
     - pawn promotion (done [only promotes to queen for now], testing)
     - en passant (done, testing)
-- must devise way to look for check states before allowing a move to be made
+- must devise way to look for check states before allowing a move to be made (done, testing)
     - putting a player into check
     - must not be able to put self into check, make these moves invalid
-- check for checkmate
+- check for checkmate and stalemate(both implemented, but must test by playing full game [i dont want to])
     - analyze all possible moves
     - if no move is possible (to exit check), player is checkmated
-- power system
+- power system (not started)
     - on random turns, pick a random empty tile to spawn a power
     - moving to that tile will give the piece the power
     - if player chooses to use a power, forfeit the move
-- display for scores and captured pieces
+- display for scores and captured pieces (not started)
 
 
 
