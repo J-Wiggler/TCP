@@ -33,14 +33,83 @@ class Board:
         for piece in self.blue:
             piece.update_state(turn, self)
 
-        self.checkmate(0)
-        self.checkmate(1)
-        self.stalemate(0)
-        self.stalemate(1)
-        self.check(0)
-        self.check(1)
-        print(len(self.red))
-        print(len(self.blue))
+        # change this later to reduce repeated code
+        if self.checkmate(0):
+            print("RED REMAINING: " + str(len(self.red)))
+            print("BLUE REMAINING: " + str(len(self.blue)))
+
+            print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
+            # iterate over all rows
+            for row in range(8):
+                print(Fore.WHITE + str(row) + " ", end="")
+                for col in range(8):
+                    if self.board[row][col] != None:
+                        piece = self.board[row][col]
+                        print(piece.icon + " ", end="")
+                    else:
+                        print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
+                print()
+            print("BLUE WINS BY CHECKMATE")
+            exit(0)
+        if self.checkmate(1):
+            print("RED REMAINING: " + str(len(self.red)))
+            print("BLUE REMAINING: " + str(len(self.blue)))
+
+            print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
+            # iterate over all rows
+            for row in range(8):
+                print(Fore.WHITE + str(row) + " ", end="")
+                for col in range(8):
+                    if self.board[row][col] != None:
+                        piece = self.board[row][col]
+                        print(piece.icon + " ", end="")
+                    else:
+                        print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
+                print()
+            print("RED WINS BY CHECKMATE")
+            exit(0)
+        if self.stalemate(0):
+            print("RED REMAINING: " + str(len(self.red)))
+            print("BLUE REMAINING: " + str(len(self.blue)))
+
+            print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
+            # iterate over all rows
+            for row in range(8):
+                print(Fore.WHITE + str(row) + " ", end="")
+                for col in range(8):
+                    if self.board[row][col] != None:
+                        piece = self.board[row][col]
+                        print(piece.icon + " ", end="")
+                    else:
+                        print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
+                print()
+            print("STALEMATE")
+            exit(0)
+        if self.stalemate(1):
+            print("RED REMAINING: " + str(len(self.red)))
+            print("BLUE REMAINING: " + str(len(self.blue)))
+
+            print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
+            # iterate over all rows
+            for row in range(8):
+                print(Fore.WHITE + str(row) + " ", end="")
+                for col in range(8):
+                    if self.board[row][col] != None:
+                        piece = self.board[row][col]
+                        print(piece.icon + " ", end="")
+                    else:
+                        print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
+                print()
+            print("STALEMATE")
+            exit(0)
+
+        if self.check(0):
+            print("RED IN CHECK")
+        if self.check(1):
+            print("BLUE IN CHECK")
+
+        print("RED REMAINING: " + str(len(self.red)))
+        print("BLUE REMAINING: " + str(len(self.blue)))
 
         print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
         # iterate over all rows
@@ -112,7 +181,7 @@ class Board:
         for move in all_moves:
             if move[2] != None and move[2].id == "k":
                 king.check = True
-                print("check")
+                #print("check")
                 return True
         king.check = False
         #print("not check")
@@ -124,7 +193,7 @@ class Board:
     # if a player is checkmated, end the game
     def checkmate(self, team: int):
         if not self.check(team):
-            print("NO CHECKMATE")
+            #print("NO CHECKMATE")
             return False
         # player is checked, look for possible moves
         all_moves = []
@@ -134,17 +203,24 @@ class Board:
                 temp = piece.compute_move([piece.position, [0, 0]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
+                # check move validity
+                for move in pos_moves:
+                    if piece.compute_move([piece.position, [move[0], move[1]]], self, True)[0]:
+                        return False
+                
         else:
             for piece in self.blue:
                 # calculate possible moves accounting for the check
                 temp = piece.compute_move([piece.position, [0, 0]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
-        if len(all_moves) == 0:
-            print("CHECKMATE")
-            return True
-        print("NO CHECKMATE")
-        return False
+                for move in pos_moves:
+                    if piece.compute_move([piece.position, [move[0], move[1]]], self, True)[0]:
+                        return False
+        
+        #print("CHECKMATE")
+        return True
+        
     
     # if no player is in check and no more moves are possible
     # call at the start of each player's turn
@@ -160,17 +236,20 @@ class Board:
                 temp = piece.compute_move([piece.position, [0, 0]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
+                for move in pos_moves:
+                    if piece.compute_move([piece.position, [move[0], move[1]]], self, True)[0]:
+                        return False
         else:
             for piece in self.blue:
                 # calculate possible moves accounting for the check
                 temp = piece.compute_move([piece.position, [0, 0]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
-        if len(all_moves) == 0:
-            print("STALEMATE")
-            return True
-        print("NOT STALEMATE")
-        return False
+                for move in pos_moves:
+                    if piece.compute_move([piece.position, [move[0], move[1]]], self, True)[0]:
+                        return False
+        
+        return True
 
     def print_array(self):
         print(self.board)
