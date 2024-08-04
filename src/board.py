@@ -34,6 +34,18 @@ class Board:
             piece.update_state(turn, self)
 
         # change this later to reduce repeated code
+        if len(self.red) == 1 and len(self.blue) == 1:
+            for row in range(8):
+                print(Fore.WHITE + str(row) + " ", end="")
+                for col in range(8):
+                    if self.board[row][col] != None:
+                        piece = self.board[row][col]
+                        print(piece.icon + " ", end="")
+                    else:
+                        print(Fore.GREEN + self.tiles[(row + col) % 2] + " ", end="")
+                print()
+            print("STALEMATE")
+            exit(0)
         if self.checkmate(0):
             print("RED REMAINING: " + str(len(self.red)))
             print("BLUE REMAINING: " + str(len(self.blue)))
