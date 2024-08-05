@@ -17,12 +17,12 @@ You can contact me at andy1233567890@gmail.com
 ## Issues by priority (tentative)
 - account for special moves (mostly done, testing)
     - castle (done, testing)
-    - pawn promotion (done [only promotes to queen for now], testing)
-    - en passant (done, testing)
-- must devise way to look for check states before allowing a move to be made (done, testing)
+    - pawn promotion (done [only promotes to queen for now])
+    - en passant (done)
+- must devise way to look for check states before allowing a move to be made (done)
     - putting a player into check
     - must not be able to put self into check, make these moves invalid
-- check for checkmate and stalemate(both implemented, but must test by playing full game [i dont want to])
+- check for checkmate and stalemate(done)
     - analyze all possible moves
     - if no move is possible (to exit check), player is checkmated
 - power system (not started)

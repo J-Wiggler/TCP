@@ -18,6 +18,9 @@ class Pawn(Piece):
             super().__init__("pawn", "p", Fore.RED + "\u265F", position, team)
         else:
             super().__init__("pawn", "p", Fore.BLUE + "\u265F", position, team)
+        self.moved = False
+        self.enp = False
+        self.cap = False
 
     def compute_move(self, positions: list[list[int]], board: Board, checking: bool):
         # first check possible moves
@@ -102,10 +105,12 @@ class Pawn(Piece):
                 if (pos0[0] + ud_var * 2) == pos1[0]:
                     # if moved 2 squares, allow enpassant
                     self.enp = True
-                self.moved = True
+                #self.moved = True
 
                 return True, move[2], self.pos_moves
         # the requested position is not valid
+        #print(self.pos_moves)
+        #print(self.moved)
         return False, None, self.pos_moves
 
     def promote(self, board: Board):

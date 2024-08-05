@@ -11,6 +11,8 @@ class King(Piece):
             super().__init__("king", "k", Fore.RED + "\u265A", position, team)
         else:
             super().__init__("king", "k", Fore.BLUE + "\u265A", position, team)
+        self.moved = False
+        self.check = False
 
     def compute_move(self, positions: list[list[int]], board: Board, checking: bool):
         # the initial position

@@ -17,9 +17,9 @@ def initialize_board(board: Board):
     #print("<<TURN 0::RED TO MOVE>>\n")
 
     # initialize the pawns
-    for i in range(8):
-        p0 = Pawn([6, i], 0)
-        p1 = Pawn([1, i], 1)
+    for i in range(0, 8):
+        p0 = Pawn([6, i], team=0)
+        p1 = Pawn([1, i], team=1)
         board.red.append(p0)
         board.blue.append(p1)
         board.add_piece(p0)
@@ -190,7 +190,6 @@ def main():
 
     # initialize the main board
     m_board = Board()
-    players = [(m_board.red, Fore.RED), (m_board.blue, Fore.BLUE)]
 
 
     # game start, menu of sorts

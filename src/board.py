@@ -125,9 +125,9 @@ class Board:
 
         print(Fore.WHITE + "  0 1 2 3 4 5 6 7")
         # iterate over all rows
-        for row in range(8):
+        for row in range(0, 8):
             print(Fore.WHITE + str(row) + " ", end="")
-            for col in range(8):
+            for col in range(0, 8):
                 if self.board[row][col] != None:
                     piece = self.board[row][col]
                     print(piece.icon + " ", end="")
@@ -143,6 +143,8 @@ class Board:
     # takes a piece as a parameter and moves it to the specified position
     def move_piece(self, piece, target, position: list[int], enemy_team: int):
         # remove the piece at the current location on the board
+        if piece.id == "p":
+            piece.moved = False
         self.board[piece.position[0]][piece.position[1]] = None
         # get the target position
         # if none, no attack was made
@@ -180,7 +182,7 @@ class Board:
         all_moves = []
         for piece in pieces:
             # throwaway positional argument, do not check for further checks, will result in infinite recursion
-            temp = piece.compute_move([piece.position, [0, 0]], self, False)
+            temp = piece.compute_move([piece.position, [-1, -1]], self, False)
             # get only the moves
             pos_moves = temp[2]
             #print(pos_moves)
@@ -212,7 +214,7 @@ class Board:
         if team == 0:
             for piece in self.red:
                 # calculate possible moves accounting for the check
-                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                temp = piece.compute_move([piece.position, [-1, -1]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
                 # check move validity
@@ -223,7 +225,7 @@ class Board:
         else:
             for piece in self.blue:
                 # calculate possible moves accounting for the check
-                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                temp = piece.compute_move([piece.position, [-1, -1]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
                 for move in pos_moves:
@@ -238,14 +240,14 @@ class Board:
     # call at the start of each player's turn
     def stalemate(self, team):
         if self.check(team):
-            print("NOT STALEMATE")
+            #print("NOT STALEMATE")
             return False
             # check red moves
         all_moves = []
         if team == 0:
             for piece in self.red:
                 # calculate possible moves accounting for the check
-                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                temp = piece.compute_move([piece.position, [-1, -1]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
                 for move in pos_moves:
@@ -254,7 +256,7 @@ class Board:
         else:
             for piece in self.blue:
                 # calculate possible moves accounting for the check
-                temp = piece.compute_move([piece.position, [0, 0]], self, True)
+                temp = piece.compute_move([piece.position, [-1, -1]], self, True)
                 pos_moves = temp[2]
                 all_moves.extend(pos_moves)
                 for move in pos_moves:
