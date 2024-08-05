@@ -3,9 +3,9 @@ from colorama import Fore
 from board import Board
 class King(Piece):
     # used for castle validity
-    moved = False
+    #moved = False
     # determine if king is in check
-    check = False
+    #check = False
     def __init__(self, position, team):
         if team == 0:
             super().__init__("king", "k", Fore.RED + "\u265A", position, team)

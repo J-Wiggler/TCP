@@ -4,14 +4,14 @@ from board import Board
 from queen import Queen
 class Pawn(Piece):
     # used for the first move allowing 2 tiles
-    moved: bool = False
+    #moved: bool = False
 
     # set to true for one turn if the pawn moved 2 tiles
     # used to determine en passant
-    enp = False
+    #enp = False
     # set to true if the pawn has captured a piece
     # used to determine en passant
-    cap = False
+    #cap = False
 
     def __init__(self, position, team):
         if team == 0:
