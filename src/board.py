@@ -4,15 +4,15 @@ from colorama import Fore
 
 class Board:
     # standard dimensions of a chessboard
-    dim = (8, 8)
+    #dim = (8, 8)
     # 2d array to hold the board state
-    board: list[list[None]]
+    #board: list[list[None]]
     # list containing the two tile colors
     tiles = ["\u25A6", "\u25A1"]
     # red team
-    red = []
+    #red = []
     # blue team
-    blue = []
+    #blue = []
 
     # ensure all positions on the board are unique locations in memory
     def __init__(self) -> None:
@@ -144,18 +144,21 @@ class Board:
     def move_piece(self, piece, target, position: list[int], enemy_team: int):
         # remove the piece at the current location on the board
         if piece.id == "p":
-            piece.moved = False
+            piece.moved = True
         self.board[piece.position[0]][piece.position[1]] = None
         # get the target position
         # if none, no attack was made
         # if the target has a piece, an attack was made
         # remove the attacked piece
         if target != None:
-            self.board[target.position[0]][target.position[1]] = None
             if enemy_team == 0:
-                self.red.pop(self.red.index(target))
+                if target in self.red:
+                    self.red.pop(self.red.index(target))
             else:
-                self.blue.pop(self.blue.index(target))
+                if target in self.blue:
+                    self.blue.pop(self.blue.index(target))
+            self.board[target.position[0]][target.position[1]] = None
+
         self.board[position[0]][position[1]] = piece
         piece.position[0] = position[0]
         piece.position[1] = position[1]

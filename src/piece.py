@@ -35,11 +35,6 @@ class Piece:
                     new_board.blue.append(piece_copy)
         
         # perform the move
-        enemy_team = []
-        if self.team == 0:
-            enemy_team = new_board.blue
-        else:
-            enemy_team = new_board.red
         # get corresponding piece on new board
         self_piece = new_board.board[self.position[0]][self.position[1]]
         target_piece = None
